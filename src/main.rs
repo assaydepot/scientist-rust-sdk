@@ -2,19 +2,28 @@
 extern crate serde;
 
 #[derive(Deserialize, Debug)]
-struct IP {
-    ip: String,
+struct SciInfo {
+    version: String,
+    message: Option<String>,
+    api_version: String,
+    environment: String,
 }
 
 #[tokio::main]
 async fn main() {
-    let client = reqwest::Client::new();
-    let result = reqwest::get("http://ip.jsontest.com")
+    let url = "https://app-staging.scientist.com/api/v1/info.json";
+    let result = reqwest::Client::builder()
+        .build()
+        .unwrap()
+        .get(url)
+        .bearer_auth("axveH-GzuLws2D5m1MYV")
+        .send()
         .await
         .unwrap()
-        .json::<IP>()
+        .json::<SciInfo>()
         .await
         .unwrap();
+    //    let body = result.bytes().await.unwrap();
 
     println!("{:#?}", result);
 }
