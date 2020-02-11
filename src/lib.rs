@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate serde;
 
-pub mod client;
+mod client;
+pub use client::Client;
+
 pub mod response;
