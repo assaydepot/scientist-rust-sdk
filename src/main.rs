@@ -1,29 +1,27 @@
-#[macro_use]
-extern crate serde;
+use reqwest::*;
 
-#[derive(Deserialize, Debug)]
-struct SciInfo {
-    version: String,
-    message: Option<String>,
-    api_version: String,
-    environment: String,
+use scientist_api_sdk::response::SciInfo;
+
+pub async fn sci_get(url: &str, token: &str) -> Result<Response> {
+    Client::builder()
+        .build()
+        .unwrap()
+        .get(url)
+        .bearer_auth(token)
+        .send()
+        .await
 }
 
 #[tokio::main]
 async fn main() {
     let url = "https://app-staging.scientist.com/api/v1/info.json";
-    let result = reqwest::Client::builder()
-        .build()
-        .unwrap()
-        .get(url)
-        .bearer_auth("axveH-GzuLws2D5m1MYV")
-        .send()
+    let token = "axveH-GzuLws2D5m1MYV";
+    let result = sci_get(url, token)
         .await
         .unwrap()
         .json::<SciInfo>()
         .await
         .unwrap();
-    //    let body = result.bytes().await.unwrap();
 
     println!("{:#?}", result);
 }
