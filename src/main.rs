@@ -1,16 +1,5 @@
-use reqwest::*;
-
+use scientist_api_sdk::client::sci_get;
 use scientist_api_sdk::response::SciInfo;
-
-pub async fn sci_get(url: &str, token: &str) -> Result<Response> {
-    Client::builder()
-        .build()
-        .unwrap()
-        .get(url)
-        .bearer_auth(token)
-        .send()
-        .await
-}
 
 #[tokio::main]
 async fn main() {
